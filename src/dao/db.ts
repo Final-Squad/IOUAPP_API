@@ -13,8 +13,8 @@ export default class DB {
     this.debtCard = mongoose.model<DebtCard>("DebtCard", DebtCardModel);
   }
 
-  public static connect() {
-    mongoose
+  public static async connect(): Promise<boolean> {
+    const isConnected: boolean = await mongoose
       .connect(
         process.env.NODE_ENV === "development"
           ? process.env.MONGO_URI_DEV || "null"
@@ -26,14 +26,17 @@ export default class DB {
           service: "database",
           environment: process.env.NODE_ENV,
         });
+        return true;
       })
-      .catch(() =>
+      .catch(() => {
         logger.error({
           message: "CANNOT CONNECT TO DATABASE ❌",
           service: "database",
           environment: process.env.NODE_ENV,
-        })
-      );
+        });
+        return false;
+      });
+    return isConnected;
   }
 
   close() {

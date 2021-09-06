@@ -16,14 +16,15 @@ const app: express.Application = express();
 app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/debtcards", debtCardRoutes);
-DB.connect();
+const isConnected = DB.connect();
 
 app.get("/", (req: express.Request, res: express.Response) =>
   res.redirect("/healthcheck")
 );
 
-app.get("/healthcheck", (req: express.Request, res: express.Response) => {
-  res.status(200).send({ status: 200 });
+app.get("/healthcheck", async (req: express.Request, res: express.Response) => {
+  const status: number = await isConnected ? 200 : 400;
+  res.status(status).send({ status });
 });
 
 app.listen(port, host, () => {
