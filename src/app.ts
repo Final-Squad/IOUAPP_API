@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from 'path';
 import DB from "./dao/db";
 import userRoutes from "./controller/userController";
 import debtCardRoutes from "./controller/debtController";
@@ -20,6 +21,10 @@ const isConnected = DB.connect();
 
 app.get("/", (req: express.Request, res: express.Response) =>
   res.redirect("/healthcheck")
+);
+
+app.get("/iouapp_api", (req: express.Request, res: express.Response) =>
+  res.sendFile(path.join(__dirname+'/iouapp_api.html'))
 );
 
 app.get("/healthcheck", async (req: express.Request, res: express.Response) => {
