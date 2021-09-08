@@ -44,6 +44,25 @@ export default class UserServive {
     }
   }
 
+  async loginUser(req: Request, res: Response): Promise<Response> {
+    validateRequest(req, res);
+
+    const user: User | null = await this.userDAO.getUserByEmail(req.params.user_email);
+    if (user) {
+      if (await this.userDAO.comparePwd(req.params.password, user.password)) {
+        return res.status(200).json({ user: jsonifyUser(user) });
+      } else {
+        return res
+        .status(400)
+        .json({ error: "incorrect password" });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ error: "user with email doesn't exist" });
+    }
+  }
+
   async createUser(req: Request, res: Response): Promise<Response> {
     validateRequest(req, res);
 
@@ -51,6 +70,7 @@ export default class UserServive {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      password:  await this.userDAO.hashPwd(req.body.password),
     }
 
     const user = await this.userDAO.createUser(reqUser);

@@ -1,4 +1,5 @@
 import mongoose, { Model } from "mongoose";
+import bcrypt from 'bcrypt';
 import User from "../types/common-interfaces";
 import DB from "./db";
 
@@ -65,6 +66,17 @@ export default class UserDAO {
       this.db.DAOError("user with email doesn't exist", this.errMessage + 'deleteUser');
       return false;
     }
+  }
+
+  async hashPwd(pwd: string): Promise<string> {
+    const saltRounds = 10;
+    const hashPwd: string = await bcrypt.hash(pwd, saltRounds).then((hash: string) => hash);
+    return hashPwd;
+  }
+
+  async comparePwd(pwd: string, hashedPwd: string): Promise<boolean> {
+    const isPwd: boolean = await bcrypt.compare(pwd, hashedPwd).then((result: boolean) => result);
+    return isPwd;
   }
 
 }

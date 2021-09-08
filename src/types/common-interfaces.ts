@@ -4,6 +4,7 @@ export default interface User extends Document {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   toPay: ObjectId[]; // people the user owes money
   toReceive: ObjectId[]; // people who owes the user money
 }

@@ -13,8 +13,13 @@ userRoutes
     body("firstName").exists(),
     body("lastName").exists(),
     body("email").isEmail(),
+    body("password").exists(),
     (req: Request, res: Response) => userService.createUser(req, res)
   );
+
+userRoutes
+  .route("/login/:user_email/:password")
+  .get((req: Request, res: Response) => userService.loginUser(req, res));
 
 userRoutes
   .route("/:user_email")
