@@ -2,12 +2,10 @@
 
 - **Technologies**
     - GitHub
-        - GitHub Secrets
     - NodeJs
     - TypeScript
     - ExpressJS
     - Winston → Logger
-    - Auth0
     - MongoDB → mongoose
 - **Architecture → Model DAO Service Controller**
     - **api** → root directory
@@ -34,9 +32,12 @@
 {
   "firstName": "John",
   "lastName": "Doe",
-  "email": "doe@gmail.com"
+  "email": "doe@gmail.com",
+  "password": "123456789"
 }
 ```
+
+[ GET ] ' users/login/:user_email/:password ' → login user
 
 [ GET | DELETE ] ' users/user_email ' → get and delete user by user's email
 
