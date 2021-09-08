@@ -43,7 +43,8 @@ node_modules/
 package-lock.json
 logger/error.log
 logger/combined.log
-dist
+dist/*
+!dist/iouapp_api.html
 .DS_Store
 jspm_packages/
 
@@ -86,7 +87,6 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
