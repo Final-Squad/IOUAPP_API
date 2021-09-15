@@ -134,8 +134,8 @@ export default class DebtCardService {
       const payer: User | null = await this.userDAO.getUserByEmail(debtCard.payer);
       const receiver: User | null = await this.userDAO.getUserByEmail(debtCard.receiver);
 
-      payer?.toPay.push(debtCard._id);
-      receiver?.toReceive.push(debtCard._id);
+      payer?.toPay.push(debtCard._id.toString());
+      receiver?.toReceive.push(debtCard._id.toString());
       payer?.save();
       receiver?.save();
     } catch (err: any) {
@@ -161,6 +161,12 @@ export default class DebtCardService {
       });
       return null;
     }
+  }
+
+  async deleteDebtcard(req: Request, res: Response): Promise<Response> {
+    const _id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(req.params.debtcard_id);
+    const isDeleted: boolean = await this.debtCardDAO.deleteDebtCard(_id);
+    return res.status(200).json({ isDeleted });
   }
 
 }

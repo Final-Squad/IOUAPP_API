@@ -60,7 +60,7 @@ Example: debtcards/users/doe@gmail.com?debt=payer
 Example: debtcards/users/doe@gmail.com?debt=receiver
 ```
 
-[ GET | PUT ] ' debtcards/:debtcard_id?paid=true || false ' → get debtcards by id,  update payment status
+[ GET | PUT | DELETE] ' debtcards/:debtcard_id?paid=true || false ' → get and delete debtcard by id, update payment status
 
 ```
 GET: http://localhost:3000/debtcards/61319824c6d622bc31899bd2
@@ -109,7 +109,7 @@ npm run start
     sudo service nginx restart
     ```
 
-4. Install pm2 globally 
+4. Install pm2 globally
 
     ```bash
     npm i #inside of IOUAPP_API dir

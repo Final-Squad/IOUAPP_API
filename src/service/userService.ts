@@ -93,7 +93,7 @@ export default class UserServive {
   async deleteUser(req: Request, res: Response): Promise<Response> {
     const deleted: boolean = await this.userDAO.deleteUser(req.params.user_email);
     return res
-      .status(deleted ? 201 : 400)
+      .status(deleted ? 200 : 400)
       .json({ message: deleted ? 'user deleted successfully' : "user with email doesn't exist" });
   }
 

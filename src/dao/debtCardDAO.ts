@@ -1,5 +1,5 @@
 import mongoose, { Model, ObjectId } from "mongoose";
-import { DebtCard } from "../types/common-interfaces";
+import User, { DebtCard } from "../types/common-interfaces";
 
 import DB from "./db";
 
@@ -7,10 +7,12 @@ export default class DebtCardDAO {
   errMessage: string = 'debtCardDAO -> ';
   db: DB;
   debtCardDB: Model<DebtCard>;
+  userDB: Model<User>;
 
   constructor(db: DB = new DB()) {
     this.db = db;
     this.debtCardDB = db.debtCard;
+    this.userDB = db.user;
   }
 
   async allDebtCards(): Promise<DebtCard[] | null> {
@@ -70,11 +72,30 @@ export default class DebtCardDAO {
     return newDebtCardDB;
   }
 
-  async deleteDebtCard(id: ObjectId): Promise<boolean> {
-    const debtCard = this.debtCardDB.findById(id);
+  async deleteDebtCard(id: mongoose.Types.ObjectId): Promise<boolean> {
+    const debtCard = await this.debtCardDB.findById(id);
     if (debtCard) {
-      debtCard.remove();
-      return true;
+      const toPayUser = await this.userDB.findOne({ email: debtCard.payer });
+      const toReceiveUser = await this.userDB.findOne({ email: debtCard.receiver });
+
+      if (toPayUser !== null && toReceiveUser !== null) {
+        toPayUser.toPay.forEach((item, index) => {
+          if (item === debtCard.id.toString()) {
+            toPayUser.toPay.splice(index, 1);
+            toPayUser.save();
+          }
+        });
+        toReceiveUser.toReceive.forEach((item, index) => {
+          if (item === debtCard.id.toString()) {
+            toReceiveUser.toReceive.splice(index, 1);
+            toReceiveUser.save();
+          }
+        });
+        debtCard.remove();
+        return true;
+      }
+
+      return false;
     } else {
       this.db.DAOError("user with email doesn't exist", this.errMessage + 'deleteUser');
       return false;

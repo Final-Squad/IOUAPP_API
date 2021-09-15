@@ -24,7 +24,10 @@ debtCardRoutes
   .put(
     param("debtcard_id").isMongoId().exists(),
     query("paid").matches(new RegExp('(?:true|false)')).exists().isBoolean(),
-    (req: Request, res: Response) => debtCardService.updateDebtCardPaymentStatus(req, res)
+    (req: Request, res: Response) => debtCardService.updateDebtCardPaymentStatus(req, res))
+  .delete(
+    param("debtcard_id").isMongoId().exists(),
+    (req: Request, res: Response) => debtCardService.deleteDebtcard(req, res)
   );
 
 debtCardRoutes
