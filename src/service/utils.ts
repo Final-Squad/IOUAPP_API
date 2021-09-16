@@ -10,6 +10,8 @@ export const jsonifyDebtCard = (debtCard: DebtCard, json: boolean = true) => {
     reason: debtCard.reason,
     amount: debtCard.amount,
     paid: debtCard.paid,
+    createdAt: debtCard.createdAt,
+    updatedAt: debtCard.updatedAt
   };
   return !json ? JSON.stringify(data) : data;
 }

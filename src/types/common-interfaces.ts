@@ -15,4 +15,6 @@ export interface DebtCard extends Document {
   reason: string;
   amount: number;
   paid: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
