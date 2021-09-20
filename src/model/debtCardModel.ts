@@ -5,7 +5,7 @@ const DebtCardModel = new Schema(
     payer: { type: String, unique: false },
     receiver: { type: String, unique: false },
     reason: String,
-    amount: Number,
+    amount: String,
     paid: { type: Boolean, default: false },
   },
   { timestamps: true }

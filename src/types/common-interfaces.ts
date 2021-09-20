@@ -13,7 +13,7 @@ export interface DebtCard extends Document {
   payer: string;
   receiver: string;
   reason: string;
-  amount: number;
+  amount: string;
   paid: boolean;
   createdAt?: string;
   updatedAt?: string;
