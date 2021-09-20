@@ -93,9 +93,11 @@ export default class DebtCardDAO {
         });
         debtCard.remove();
         return true;
+      } else {
+        debtCard.remove();
+        return true;
       }
 
-      return false;
     } else {
       this.db.DAOError("user with email doesn't exist", this.errMessage + 'deleteUser');
       return false;
