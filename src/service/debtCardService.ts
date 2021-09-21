@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User, { DebtCard } from "../types/common-interfaces";
 import DebtCardDAO from "../dao/debtCardDAO";
 import UserDAO from "../dao/userDAO";
-import mongoose from "mongoose";
+import mongoose, { deleteModel } from "mongoose";
 import { debtCardList, jsonifyDebtCard, validateRequest } from "./utils";
 const logger = require("../../logger/logger");
 
@@ -104,15 +104,26 @@ export default class DebtCardService {
     validateRequest(req, res);
 
     let debtCards: DebtCard[] | null = [];
+    let debtCardsResponse: DebtCard[] | null = [];
 
     const userEmail: string = req.params.user_email;
     const debtType = req.query.debt || null;
     if (debtType && debtType === 'payer') {
       debtCards = await this.debtCardDAO.getDebtCardsForPayer(userEmail);
+      debtCards?.map((debtCard) => {
+        if (debtCard.paid === false) {
+          debtCardsResponse?.push(debtCard)
+        }
+      });
     } else if (debtType && debtType === 'receiver') {
       debtCards = await this.debtCardDAO.getDebtCardsForReceiver(userEmail);
+      debtCards?.map((debtCard) => {
+        if (debtCard.paid === false) {
+          debtCardsResponse?.push(debtCard)
+        }
+      });
     }
-    return res.status(200).json({ debtCards: debtCardList(debtCards) });
+    return res.status(200).json({ debtCards: debtCardList(debtCardsResponse) });
   }
 
   async updateDebtCardPaymentStatus(req: Request, res: Response): Promise<Response> {
